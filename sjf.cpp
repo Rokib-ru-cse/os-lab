@@ -1,75 +1,54 @@
-//#include<bitstd/c++.h>
-#include<bits/stdc++.h>
+
+#include<iostream>
 using namespace std;
+
 int main()
 {
-    int p[100],b[100],wt[100],turn_at[100];
-    cout<<"enter burst time"<<endl;
-    for(int i=0;i<3;i++)
-    {
-        cout<<"p["<<i+1<<"] = ";
-        cin>>b[i];
-        p[i] = i+1;
+    int n,i,j,burstTime[30],p[20];
+    double waitTime[30],avgWaitTime=0.0;
+    cout<<"Enter total number of processes:";
+    cin>>n;
 
+    cout<<"\nEnter Process Burst Time\n";
+    for(i=0;i<n;i++)
+    {
+        cout<<"P["<<i+1<<"]:";
+        cin>>burstTime[i];
+        p[i]=i+1;
     }
-//    for(int i=0;i<3;i++)
-//    {
-//
-//        cout<<b[i];
-//
-//    }
+     int temp;
+     for(i=0;i<n;i++){
+            for(j=i+1;j<n;j++){
+                if(burstTime[i]>burstTime[j]){
+                  temp=burstTime[i];
+                  burstTime[i]=burstTime[j];
+                  burstTime[j]=temp;
 
-    for(int i=0;i<3;i++)
+                   temp=p[i];
+                   p[i]=p[j];
+                   p[j]=temp;
+                }
+            }
+     }
+     waitTime[0]=0;
+
+    for(i=1;i<=n;i++)
     {
-        int pos=i;
-        for(int j=i+1;j<3;j++)
-        {
-            if(b[j]<b[pos])
-                pos=j;
-        }
-
-        int temp=b[i];
-        b[i]=b[pos];
-        b[pos]=temp;
-
-        temp=p[i];
-        p[i]=p[pos];
-        p[pos]=temp;
-    }
-
-    wt[0]=0;
-    int buffer =0;
-    for(int i=1;i<3;i++)
-    {
-
-        wt[i] = b[i-1]+buffer;
-        buffer = wt[i];
-
+       waitTime[i]=0;
+        for(j=0;j<i;j++)
+           waitTime[i]+=burstTime[j];
     }
 
-     buffer =0;
-    for(int i=0;i<3;i++)
+    cout<<"\nProcess\t\tBurst Time\tWaiting Time";
+    for(i=0;i<n;i++)
     {
-
-        turn_at[i] = b[i]+buffer;
-        buffer = turn_at[i];
-
+        avgWaitTime+= waitTime[i];
+        cout<<"\nP["<<p[i]<<"]"<<"\t\t"<<burstTime[i]<<"\t\t"<< waitTime[i];
     }
 
+    avgWaitTime/=i;
 
-
-
-
-
-    cout<<endl<<"Process\tBurst Time\tWaiting Time\tTurnaround Time"<<endl;
-    for(int i=0;i<3;i++)
-    {
-
-
-        cout<<"p["<<p[i]<<"]\t"<<b[i]<<"\t\t"<<wt[i]<<"\t\t"<<turn_at[i]<<endl;
-
-    }
+    cout<<"\n\nAverage Waiting Time:"<<avgWaitTime;
 
     return 0;
 }
-
